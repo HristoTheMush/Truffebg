@@ -1,0 +1,307 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Truffes de Bulgarie - Accueil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --black: #000000;
+      --dark: #1a1a1a;
+      --forest-green: #2e4f2f;
+      --warm-brown: #8b5e3c;
+      --light: #f5f5f5;
+      --gray: #999;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: var(--light);
+      background: var(--black);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      padding: 20px 40px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(46, 79, 47, 0.3);
+      transition: padding 0.4s ease, background 0.4s ease;
+    }
+
+    .logo {
+      font-size: 2rem;
+      color: var(--forest-green);
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+
+    .logo:hover {
+      color: var(--warm-brown);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: 1rem;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--warm-brown);
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      background: url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=3840&q=80') center/cover no-repeat;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--light);
+      overflow: hidden;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 0.5s ease;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 0 20px;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 0.5s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      color: var(--forest-green);
+      animation: slideUp 1s ease forwards 0.7s;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); }
+      to { transform: translateY(0); }
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin-bottom: 30px;
+      color: var(--warm-brown);
+    }
+
+    .hero .cta {
+      display: inline-block;
+      background: var(--forest-green);
+      color: var(--light);
+      padding: 12px 30px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 5px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero .cta:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(46, 79, 47, 0.4);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      padding: 40px 20px;
+      text-align: center;
+      animation: fadeIn 1s ease forwards 0.5s;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-content h3 {
+      font-size: 1.8rem;
+      color: var(--forest-green);
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      color: var(--light);
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--warm-brown);
+    }
+
+    .footer-contact p {
+      margin: 10px 0;
+    }
+
+    .footer-contact a {
+      color: var(--forest-green);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-contact a:hover {
+      color: var(--warm-brown);
+    }
+
+    .footer-copyright {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">Truffes de Bulgarie</div>
+    <nav>
+      <ul>
+        <li><a href="#home">Accueil</a></li>
+        <li><a href="shop-fresh-truffles.html">Truffes</a></li>
+        <li><a href="about.html">À propos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Truffes de Bulgarie</h1>
+      <p>Récoltées avec passion dans les forêts anciennes de Veliko Tarnovo</p>
+      <a href="shop-fresh-truffles.html" class="cta">Découvrir nos truffes</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <h3>Truffes de Bulgarie</h3>
+      <div class="footer-links">
+        <a href="#home">Accueil</a>
+        <a href="shop-fresh-truffles.html">Truffes</a>
+        <a href="about.html">À propos</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <p>Email: <a href="mailto:contact@truffesdebulgarie.com">contact@truffesdebulgarie.com</a></p>
+        <p>Téléphone: <a href="tel:+33643736499">+33 6 43 73 64 99</a></p>
+        <p>WhatsApp: <a href="https://wa.me/359879261809">+359 879 26 1809</a></p>
+      </div>
+      <p class="footer-copyright">© 2025 Truffes de Bulgarie. Tous droits réservés.</p>
+    </div>
+  </footer>
+</body>
+</html>

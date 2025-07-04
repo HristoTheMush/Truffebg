@@ -1,0 +1,319 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Truffes de Bulgarie - Truffes Fraîches</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --black: #000000;
+      --dark: #1a1a1a;
+      --forest-green: #2e4f2f;
+      --warm-brown: #8b5e3c;
+      --light: #f5f5f5;
+      --gray: #999;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      color: var(--light);
+      background: var(--black);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      padding: 20px 40px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(46, 79, 47, 0.3);
+      transition: padding 0.4s ease, background 0.4s ease;
+    }
+
+    .logo {
+      font-size: 2rem;
+      color: var(--forest-green);
+      font-weight: 700;
+      transition: color 0.3s ease;
+    }
+
+    .logo:hover {
+      color: var(--warm-brown);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 30px;
+    }
+
+    nav a {
+      color: var(--light);
+      text-decoration: none;
+      font-size: 1rem;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--warm-brown);
+    }
+
+    /* Products Section */
+    .products {
+      padding: 100px 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .products h1 {
+      font-size: 2.5rem;
+      color: var(--forest-green);
+      margin-bottom: 40px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .product-card {
+      background: rgba(26, 26, 26, 0.9);
+      padding: 20px;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+      transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover img {
+      opacity: 0.9;
+    }
+
+    .product-card h3 {
+      font-size: 1.5rem;
+      color: var(--forest-green);
+      margin: 15px 0;
+      transition: color 0.3s ease;
+    }
+
+    .product-card:hover h3 {
+      color: var(--warm-brown);
+    }
+
+    .product-card p {
+      color: var(--warm-brown);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      padding: 40px 20px;
+      text-align: center;
+      animation: fadeIn 1s ease forwards 0.5s;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-content h3 {
+      font-size: 1.8rem;
+      color: var(--forest-green);
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      color: var(--light);
+      text-decoration: none;
+      margin: 0 15px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--warm-brown);
+    }
+
+    .footer-contact p {
+      margin: 10px 0;
+    }
+
+    .footer-contact a {
+      color: var(--forest-green);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-contact a:hover {
+      color: var(--warm-brown);
+    }
+
+    .footer-copyright {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+      }
+
+      .products {
+        padding: 80px 20px;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">Truffes de Bulgarie</div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="#products">Truffes</a></li>
+        <li><a href="about.html">À propos</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Products Section -->
+  <section class="products" id="products">
+    <h1>Nos Truffes Fraîches</h1>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://i.etsystatic.com/18376711/r/il/a1c443/1699001407/il_500x500.1699001407_c2nw.jpg" alt="Truffe de Bourgogne">
+        <h3>Truffe de Bourgogne (Tuber uncinatum)</h3>
+        <p>Saveur intense et complexe avec des notes de noisette et de champignon forestier. Saison : septembre à janvier.</p>
+      </div>
+      <div class="product-card">
+        <img src="https://wholesale.trufo.com/cdn/shop/products/magnatum_1.jpg?v=1616169788" alt="Truffe Blanche">
+        <h3>Truffe Blanche (Tuber Magnatum)</h3>
+        <p>Arôme intense avec des notes d'ail et de fromage. Saison : octobre à décembre.</p>
+      </div>
+      <div class="product-card">
+        <img src="https://media.istockphoto.com/id/153369321/photo/black-truffles-growing-in-the-forrest.jpg?s=612x612&w=0&k=20&c=1uC9PFZkhdJZTDB00vMO7pwEqqgOyt7QWOUFsr91_yY=" alt="Truffe d'Été">
+        <h3>Truffe d'Été (Tuber Aestivum)</h3>
+        <p>Arôme doux et léger, parfait pour les plats d'été. Saison : mai à septembre.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <div class="footer-content">
+      <h3>Truffes de Bulgarie</h3>
+      <div class="footer-links">
+        <a href="index.html">Accueil</a>
+        <a href="#products">Truffes</a>
+        <a href="about.html">À propos</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <p>Email: <a href="mailto:contact@truffesdebulgarie.com">contact@truffesdebulgarie.com</a></p>
+        <p>Téléphone: <a href="tel:+33643736499">+33 6 43 73 64 99</a></p>
+        <p>WhatsApp: <a href="https://wa.me/359879261809">+359 879 26 1809</a></p>
+      </div>
+      <p class="footer-copyright">© 2025 Truffes de Bulgarie. Tous droits réservés.</p>
+    </div>
+  </footer>
+</body>
+</html>
