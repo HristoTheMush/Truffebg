@@ -89,6 +89,27 @@
       color: var(--warm-brown);
     }
 
+    .lang-toggle {
+      display: flex;
+      gap: 5px;
+      margin-right: 20px;
+    }
+    .lang-toggle button {
+      background: none;
+      border: 1px solid var(--forest-green);
+      color: var(--forest-green);
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang-toggle button.active,
+    .lang-toggle button:hover {
+      background: var(--forest-green);
+      color: var(--light);
+    }
+
     /* About Section */
     .about {
       padding: 110px 40px 80px;
@@ -214,6 +235,10 @@
       nav.active {
         display: block;
       }
+
+      .lang-toggle {
+        margin: 10px 0 0 0;
+      }
     }
 
     @media (min-width: 769px) {
@@ -232,14 +257,19 @@
   <!-- Header -->
   <header>
     <div class="header-container">
-      <div class="logo">Truffes de Bulgarie</div>
+      <div class="logo" data-i18n="logo">Truffes de Bulgarie</div>
+      <div class="lang-toggle">
+        <button data-lang="fr" class="active">FR</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="it">IT</button>
+      </div>
       <button class="menu-toggle" aria-label="Ouvrir le menu">&#9776;</button>
       <nav>
         <ul>
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="shop-fresh-truffles.html">Truffes</a></li>
-          <li><a href="about.html">À propos</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="index.html" data-i18n="Accueil">Accueil</a></li>
+          <li><a href="shop-fresh-truffles.html" data-i18n="Truffes">Truffes</a></li>
+          <li><a href="about.html" data-i18n="À propos">À propos</a></li>
+          <li><a href="#contact" data-i18n="Contact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -247,26 +277,26 @@
 
   <!-- About Section -->
   <section class="about" id="about">
-    <h1>À propos de nous</h1>
-    <p>Nous sommes des producteurs, récolteurs et vendeurs de truffes bulgares avec plus de 10 ans d'expérience. Nous exportons vers des pays tels que l'Italie, la France, l'Espagne et l'Allemagne. Notre équipe dédiée de 30 personnes s'engage à offrir les meilleures truffes disponibles sur le marché. Notre engagement envers la qualité et la satisfaction client nous a permis de bâtir une solide réputation auprès de nos clients fidèles.</p>
-    <p>Nous n'utilisons que des truffes locales fraîches pour garantir la plus haute qualité, directement depuis la forêt, à un prix imbattable. Nous prenons des mesures supplémentaires pour assurer une livraison à temps, afin que vous n'ayez jamais à vous soucier des retards.</p>
-    <p><strong>Adresse :</strong> Lyben Karavelov 93, Veliko Tarnovo<br><strong>Entreprise :</strong> Tuber BG<br><strong>Numéro de TVA :</strong> BG207781596</p>
+    <h1 data-i18n="about-title">À propos de nous</h1>
+    <p data-i18n="about-p1">Nous sommes des producteurs, récolteurs et vendeurs de truffes bulgares avec plus de 10 ans d'expérience. Nous exportons vers des pays tels que l'Italie, la France, l'Espagne et l'Allemagne. Notre équipe dédiée de 30 personnes s'engage à offrir les meilleures truffes disponibles sur le marché. Notre engagement envers la qualité et la satisfaction client nous a permis de bâtir une solide réputation auprès de nos clients fidèles.</p>
+    <p data-i18n="about-p2">Nous n'utilisons que des truffes locales fraîches pour garantir la plus haute qualité, directement depuis la forêt, à un prix imbattable. Nous prenons des mesures supplémentaires pour assurer une livraison à temps, afin que vous n'ayez jamais à vous soucier des retards.</p>
+    <p data-i18n="about-p3"><strong>Adresse :</strong> Lyben Karavelov 93, Veliko Tarnovo<br><strong>Entreprise :</strong> Tuber BG<br><strong>Numéro de TVA :</strong> BG207781596</p>
   </section>
 
   <!-- Footer -->
   <footer id="contact">
     <div class="footer-content">
-      <h3>Truffes de Bulgarie</h3>
+      <h3 data-i18n="logo">Truffes de Bulgarie</h3>
       <div class="footer-links">
-        <a href="index.html">Accueil</a>
-        <a href="shop-fresh-truffles.html">Truffes</a>
-        <a href="#about">À propos</a>
-        <a href="#contact">Contact</a>
+        <a href="index.html" data-i18n="Accueil">Accueil</a>
+        <a href="shop-fresh-truffles.html" data-i18n="Truffes">Truffes</a>
+        <a href="#about" data-i18n="À propos">À propos</a>
+        <a href="#contact" data-i18n="Contact">Contact</a>
       </div>
       <div class="footer-contact">
         <p>Email: <a href="mailto:contact@truffesdebulgarie.com">contact@truffesdebulgarie.com</a></p>
-        <p>Téléphone: <a href="tel:+33643736499">+33 6 43 73 64 99</a></p>
-        <p>WhatsApp: <a href="https://wa.me/359879261809">+359 879 26 1809</a></p>
+        <p data-i18n="phone">Téléphone: <a href="tel:+33643736499">+33 6 43 73 64 99</a></p>
+        <p data-i18n="whatsapp">WhatsApp: <a href="https://wa.me/359879261809">+359 879 26 1809</a></p>
       </div>
       <p class="footer-copyright">© 2025 Truffes de Bulgarie. Tous droits réservés.</p>
     </div>
@@ -276,11 +306,73 @@
     document.querySelector('.menu-toggle').addEventListener('click', function() {
       document.querySelector('nav').classList.toggle('active');
     });
-    // Optional: close menu when a link is clicked (mobile UX)
     document.querySelectorAll('nav ul li a').forEach(link => {
       link.addEventListener('click', () => {
         document.querySelector('nav').classList.remove('active');
       });
+    });
+
+    // Language translations
+    const translations = {
+      fr: {
+        "logo": "Truffes de Bulgarie",
+        "Accueil": "Accueil",
+        "Truffes": "Truffes",
+        "À propos": "À propos",
+        "Contact": "Contact",
+        "about-title": "À propos de nous",
+        "about-p1": "Nous sommes des producteurs, récolteurs et vendeurs de truffes bulgares avec plus de 10 ans d'expérience. Nous exportons vers des pays tels que l'Italie, la France, l'Espagne et l'Allemagne. Notre équipe dédiée de 30 personnes s'engage à offrir les meilleures truffes disponibles sur le marché. Notre engagement envers la qualité et la satisfaction client nous a permis de bâtir une solide réputation auprès de nos clients fidèles.",
+        "about-p2": "Nous n'utilisons que des truffes locales fraîches pour garantir la plus haute qualité, directement depuis la forêt, à un prix imbattable. Nous prenons des mesures supplémentaires pour assurer une livraison à temps, afin que vous n'ayez jamais à vous soucier des retards.",
+        "about-p3": "<strong>Adresse :</strong> Lyben Karavelov 93, Veliko Tarnovo<br><strong>Entreprise :</strong> Tuber BG<br><strong>Numéro de TVA :</strong> BG207781596",
+        "phone": "Téléphone: <a href=\"tel:+33643736499\">+33 6 43 73 64 99</a>",
+        "whatsapp": "WhatsApp: <a href=\"https://wa.me/359879261809\">+359 879 26 1809</a>"
+      },
+      en: {
+        "logo": "Bulgarian Truffles",
+        "Accueil": "Home",
+        "Truffes": "Truffles",
+        "À propos": "About",
+        "Contact": "Contact",
+        "about-title": "About Us",
+        "about-p1": "We are producers, gatherers, and sellers of Bulgarian truffles with over 10 years of experience. We export to countries such as Italy, France, Spain, and Germany. Our dedicated team of 30 people is committed to offering the best truffles available on the market. Our commitment to quality and customer satisfaction has earned us a solid reputation with our loyal clients.",
+        "about-p2": "We use only fresh local truffles to ensure the highest quality, directly from the forest, at an unbeatable price. We take extra steps to ensure on-time delivery, so you never have to worry about delays.",
+        "about-p3": "<strong>Address:</strong> Lyben Karavelov 93, Veliko Tarnovo<br><strong>Company:</strong> Tuber BG<br><strong>VAT Number:</strong> BG207781596",
+        "phone": "Phone: <a href=\"tel:+33643736499\">+33 6 43 73 64 99</a>",
+        "whatsapp": "WhatsApp: <a href=\"https://wa.me/359879261809\">+359 879 26 1809</a>"
+      },
+      it: {
+        "logo": "Tartufi di Bulgaria",
+        "Accueil": "Home",
+        "Truffes": "Tartufi",
+        "À propos": "Chi siamo",
+        "Contact": "Contatto",
+        "about-title": "Chi siamo",
+        "about-p1": "Siamo produttori, raccoglitori e venditori di tartufi bulgari con oltre 10 anni di esperienza. Esportiamo in paesi come Italia, Francia, Spagna e Germania. Il nostro team dedicato di 30 persone si impegna a offrire i migliori tartufi disponibili sul mercato. Il nostro impegno per la qualità e la soddisfazione del cliente ci ha permesso di costruire una solida reputazione tra i nostri clienti fedeli.",
+        "about-p2": "Utilizziamo solo tartufi locali freschi per garantire la massima qualità, direttamente dalla foresta, a un prezzo imbattibile. Prendiamo misure extra per garantire una consegna puntuale, così non dovrai mai preoccuparti dei ritardi.",
+        "about-p3": "<strong>Indirizzo:</strong> Lyben Karavelov 93, Veliko Tarnovo<br><strong>Azienda:</strong> Tuber BG<br><strong>P.IVA:</strong> BG207781596",
+        "phone": "Telefono: <a href=\"tel:+33643736499\">+33 6 43 73 64 99</a>",
+        "whatsapp": "WhatsApp: <a href=\"https://wa.me/359879261809\">+359 879 26 1809</a>"
+      }
+    };
+
+    function setLang(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (el.tagName === "P" || el.tagName === "H1" || el.tagName === "H3") {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang')));
     });
   </script>
 </body>

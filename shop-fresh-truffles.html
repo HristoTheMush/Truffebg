@@ -281,20 +281,50 @@
       }
     }
     /* ...existing code... */
+    .lang-toggle {
+  display: flex;
+  gap: 5px;
+  margin-right: 20px;
+}
+.lang-toggle button {
+  background: none;
+  border: 1px solid var(--forest-green);
+  color: var(--forest-green);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.lang-toggle button.active,
+.lang-toggle button:hover {
+  background: var(--forest-green);
+  color: var(--light);
+}
+@media (max-width: 768px) {
+  .lang-toggle {
+    margin: 10px 0 0 0;
+  }
+}
   </style>
 </head>
 <body>
   <!-- Header -->
   <header>
     <div class="header-container">
-      <div class="logo">Truffes de Bulgarie</div>
+      <div class="logo" data-i18n="logo">Truffes de Bulgarie</div>
+      <div class="lang-toggle">
+        <button data-lang="fr" class="active">FR</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="it">IT</button>
+      </div>
       <button class="menu-toggle" aria-label="Ouvrir le menu">&#9776;</button>
       <nav>
         <ul>
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="shop-fresh-truffles.html">Truffes</a></li>
-          <li><a href="about.html">À propos</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="index.html" data-i18n="Accueil">Accueil</a></li>
+          <li><a href="shop-fresh-truffles.html" data-i18n="Truffes">Truffes</a></li>
+          <li><a href="about.html" data-i18n="À propos">À propos</a></li>
+          <li><a href="#contact" data-i18n="Contact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -302,25 +332,25 @@
 
   <!-- Products Section -->
   <section class="products" id="products">
-    <h1>Nos Truffes Fraîches</h1>
+    <h1 data-i18n="products-title">Nos Truffes Fraîches</h1>
     <div class="product-grid">
       <div class="product-card">
         <img src="https://i.etsystatic.com/18376711/r/il/a1c443/1699001407/il_500x500.1699001407_c2nw.jpg" alt="Truffe de Bourgogne">
-        <h3>Truffe de Bourgogne (Tuber uncinatum)</h3>
-        <p>Saveur intense et complexe avec des notes de noisette et de champignon forestier. Saison : septembre à janvier.</p>
-        <span class="product-price">120&nbsp;€/kg</span>
+        <h3 data-i18n="truffe-bourgogne-title">Truffe de Bourgogne (Tuber uncinatum)</h3>
+        <p data-i18n="truffe-bourgogne-desc">Saveur intense et complexe avec des notes de noisette et de champignon forestier. Saison : septembre à janvier.</p>
+        <span class="product-price" data-i18n="truffe-bourgogne-price">120&nbsp;€/kg</span>
       </div>
       <div class="product-card">
         <img src="https://wholesale.trufo.com/cdn/shop/products/magnatum_1.jpg?v=1616169788" alt="Truffe Blanche">
-        <h3>Truffe Blanche (Tuber Magnatum)</h3>
-        <p>Arôme intense avec des notes d'ail et de fromage. Saison : octobre à décembre.</p>
-        <span class="product-price">&nbsp;€/kg</span>
+        <h3 data-i18n="truffe-blanche-title">Truffe Blanche (Tuber Magnatum)</h3>
+        <p data-i18n="truffe-blanche-desc">Arôme intense avec des notes d'ail et de fromage. Saison : octobre à décembre.</p>
+        <span class="product-price" data-i18n="truffe-blanche-price">2&nbsp;€/kg</span>
       </div>
       <div class="product-card">
         <img src="https://media.istockphoto.com/id/153369321/photo/black-truffles-growing-in-the-forrest.jpg?s=612x612&w=0&k=20&c=1uC9PFZkhdJZTDB00vMO7pwEqqgOyt7QWOUFsr91_yY=" alt="Truffe d'Été">
-        <h3>Truffe d'Été (Tuber Aestivum)</h3>
-        <p>Arôme doux et léger, parfait pour les plats d'été. Saison : mai à septembre.</p>
-        <span class="product-price">&nbsp;€/kg</span>
+        <h3 data-i18n="truffe-ete-title">Truffe d'Été (Tuber Aestivum)</h3>
+        <p data-i18n="truffe-ete-desc">Arôme doux et léger, parfait pour les plats d'été. Saison : mai à septembre.</p>
+        <span class="product-price" data-i18n="truffe-ete-price">&nbsp;€/kg</span>
       </div>
     </div>
   </section>
@@ -328,17 +358,17 @@
   <!-- Footer -->
   <footer id="contact">
     <div class="footer-content">
-      <h3>Truffes de Bulgarie</h3>
+      <h3 data-i18n="logo">Truffes de Bulgarie</h3>
       <div class="footer-links">
-        <a href="index.html">Accueil</a>
-        <a href="#products">Truffes</a>
-        <a href="about.html">À propos</a>
-        <a href="#contact">Contact</a>
+        <a href="index.html" data-i18n="Accueil">Accueil</a>
+        <a href="#products" data-i18n="Truffes">Truffes</a>
+        <a href="about.html" data-i18n="À propos">À propos</a>
+        <a href="#contact" data-i18n="Contact">Contact</a>
       </div>
       <div class="footer-contact">
         <p>Email: <a href="mailto:contact@truffesdebulgarie.com">contact@truffesdebulgarie.com</a></p>
-        <p>Téléphone: <a href="tel:+33643736499">+33 6 43 73 64 99</a></p>
-        <p>WhatsApp: <a href="https://wa.me/359879261809">+359 879 26 1809</a></p>
+        <p data-i18n="phone">Téléphone: <a href="tel:+33643736499">+33 6 43 73 64 99</a></p>
+        <p data-i18n="whatsapp">WhatsApp: <a href="https://wa.me/359879261809">+359 879 26 1809</a></p>
       </div>
       <p class="footer-copyright">© 2025 Truffes de Bulgarie. Tous droits réservés.</p>
     </div>
@@ -348,12 +378,93 @@
     document.querySelector('.menu-toggle').addEventListener('click', function() {
       document.querySelector('nav').classList.toggle('active');
     });
-    // Optional: close menu when a link is clicked (mobile UX)
     document.querySelectorAll('nav ul li a').forEach(link => {
       link.addEventListener('click', () => {
         document.querySelector('nav').classList.remove('active');
       });
     });
+
+    // Language translations
+    const translations = {
+      fr: {
+        "logo": "Truffes de Bulgarie",
+        "Accueil": "Accueil",
+        "Truffes": "Truffes",
+        "À propos": "À propos",
+        "Contact": "Contact",
+        "products-title": "Nos Truffes Fraîches",
+        "truffe-bourgogne-title": "Truffe de Bourgogne (Tuber uncinatum)",
+        "truffe-bourgogne-desc": "Saveur intense et complexe avec des notes de noisette et de champignon forestier. Saison : septembre à janvier.",
+        "truffe-bourgogne-price": "350&nbsp;€/kg",
+        "truffe-blanche-title": "Truffe Blanche (Tuber Magnatum)",
+        "truffe-blanche-desc": "Arôme intense avec des notes d'ail et de fromage. Saison : octobre à décembre.",
+        "truffe-blanche-price": "2500&nbsp;€/kg",
+        "truffe-ete-title": "Truffe d'Été (Tuber Aestivum)",
+        "truffe-ete-desc": "Arôme doux et léger, parfait pour les plats d'été. Saison : mai à septembre.",
+        "truffe-ete-price": "120&nbsp;€/kg",
+        "phone": "Téléphone: <a href=\"tel:+33643736499\">+33 6 43 73 64 99</a>",
+        "whatsapp": "WhatsApp: <a href=\"https://wa.me/359879261809\">+359 879 26 1809</a>"
+      },
+      en: {
+        "logo": "Bulgarian Truffles",
+        "Accueil": "Home",
+        "Truffes": "Truffles",
+        "À propos": "About",
+        "Contact": "Contact",
+        "products-title": "Our Fresh Truffles",
+        "truffe-bourgogne-title": "Burgundy Truffle (Tuber uncinatum)",
+        "truffe-bourgogne-desc": "Intense and complex flavor with notes of hazelnut and forest mushroom. Season: September to January.",
+        "truffe-bourgogne-price": "€350/kg",
+        "truffe-blanche-title": "White Truffle (Tuber Magnatum)",
+        "truffe-blanche-desc": "Intense aroma with notes of garlic and cheese. Season: October to December.",
+        "truffe-blanche-price": "€2500/kg",
+        "truffe-ete-title": "Summer Truffle (Tuber Aestivum)",
+        "truffe-ete-desc": "Mild and light aroma, perfect for summer dishes. Season: May to September.",
+        "truffe-ete-price": "€120/kg",
+        "phone": "Phone: <a href=\"tel:+33643736499\">+33 6 43 73 64 99</a>",
+        "whatsapp": "WhatsApp: <a href=\"https://wa.me/359879261809\">+359 879 26 1809</a>"
+      },
+      it: {
+        "logo": "Tartufi di Bulgaria",
+        "Accueil": "Home",
+        "Truffes": "Tartufi",
+        "À propos": "Chi siamo",
+        "Contact": "Contatto",
+        "products-title": "I Nostri Tartufi Freschi",
+        "truffe-bourgogne-title": "Tartufo di Borgogna (Tuber uncinatum)",
+        "truffe-bourgogne-desc": "Sapore intenso e complesso con note di nocciola e funghi di bosco. Stagione: settembre-gennaio.",
+        "truffe-bourgogne-price": "350&nbsp;€/kg",
+        "truffe-blanche-title": "Tartufo Bianco (Tuber Magnatum)",
+        "truffe-blanche-desc": "Aroma intenso con note di aglio e formaggio. Stagione: ottobre-dicembre.",
+        "truffe-blanche-price": "2500&nbsp;€/kg",
+        "truffe-ete-title": "Tartufo Estivo (Tuber Aestivum)",
+        "truffe-ete-desc": "Aroma delicato e leggero, perfetto per i piatti estivi. Stagione: maggio-settembre.",
+        "truffe-ete-price": "120&nbsp;€/kg",
+        "phone": "Telefono: <a href=\"tel:+33643736499\">+33 6 43 73 64 99</a>",
+        "whatsapp": "WhatsApp: <a href=\"https://wa.me/359879261809\">+359 879 26 1809</a>"
+      }
+    };
+
+    function setLang(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (el.tagName === "P" || el.tagName === "H1" || el.tagName === "H3" || el.classList.contains("product-price")) {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+      document.querySelectorAll('.lang-toggle button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang')));
+    });
+
+    setLang('fr');
   </script>
-</body>
-</html>
+<!-- ...existing code... -->
