@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8"/>
@@ -183,6 +144,18 @@
       font-size: 0.9rem;
     }
 
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--forest-green);
+      margin-top: 18px;
+      margin-bottom: 0;
+      display: block;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
     /* Footer */
     footer {
       background: var(--dark);
@@ -238,12 +211,41 @@
       header {
         flex-direction: column;
         padding: 15px;
+        align-items: flex-start;
+      }
+
+      .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--light);
+        font-size: 2rem;
+        cursor: pointer;
+        margin-left: auto;
+        margin-top: 5px;
+        z-index: 1100;
+      }
+
+      nav {
+        width: 100%;
       }
 
       nav ul {
         flex-direction: column;
         gap: 15px;
         margin-top: 10px;
+        width: 100%;
+        background: rgba(0,0,0,0.98);
+        position: absolute;
+        top: 70px;
+        left: 0;
+        padding: 20px 0;
+        display: none;
+        border-bottom: 1px solid rgba(46, 79, 47, 0.3);
+      }
+
+      nav ul.active {
+        display: flex;
       }
 
       .products {
@@ -255,16 +257,19 @@
       }
     }
 
-    /* Smooth Scroll */
-    html {
-      scroll-behavior: smooth;
+    @media (min-width: 769px) {
+      .menu-toggle {
+        display: none;
+      }
     }
+    /* ...existing code... */
   </style>
 </head>
 <body>
   <!-- Header -->
   <header>
     <div class="logo">Truffes de Bulgarie</div>
+    <button class="menu-toggle" aria-label="Ouvrir le menu">&#9776;</button>
     <nav>
       <ul>
         <li><a href="index.html">Accueil</a></li>
@@ -283,16 +288,19 @@
         <img src="https://i.etsystatic.com/18376711/r/il/a1c443/1699001407/il_500x500.1699001407_c2nw.jpg" alt="Truffe de Bourgogne">
         <h3>Truffe de Bourgogne (Tuber uncinatum)</h3>
         <p>Saveur intense et complexe avec des notes de noisette et de champignon forestier. Saison : septembre à janvier.</p>
+        <span class="product-price">350&nbsp;€/kg</span>
       </div>
       <div class="product-card">
         <img src="https://wholesale.trufo.com/cdn/shop/products/magnatum_1.jpg?v=1616169788" alt="Truffe Blanche">
         <h3>Truffe Blanche (Tuber Magnatum)</h3>
         <p>Arôme intense avec des notes d'ail et de fromage. Saison : octobre à décembre.</p>
+        <span class="product-price">2500&nbsp;€/kg</span>
       </div>
       <div class="product-card">
         <img src="https://media.istockphoto.com/id/153369321/photo/black-truffles-growing-in-the-forrest.jpg?s=612x612&w=0&k=20&c=1uC9PFZkhdJZTDB00vMO7pwEqqgOyt7QWOUFsr91_yY=" alt="Truffe d'Été">
         <h3>Truffe d'Été (Tuber Aestivum)</h3>
         <p>Arôme doux et léger, parfait pour les plats d'été. Saison : mai à septembre.</p>
+        <span class="product-price">120&nbsp;€/kg</span>
       </div>
     </div>
   </section>
@@ -315,5 +323,17 @@
       <p class="footer-copyright">© 2025 Truffes de Bulgarie. Tous droits réservés.</p>
     </div>
   </footer>
+  <script>
+    // Responsive menu toggle
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+      document.querySelector('nav ul').classList.toggle('active');
+    });
+    // Optional: close menu when a link is clicked (mobile UX)
+    document.querySelectorAll('nav ul li a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.querySelector('nav ul').classList.remove('active');
+      });
+    });
+  </script>
 </body>
 </html>
