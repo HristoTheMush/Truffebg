@@ -40,13 +40,18 @@
       top: 0;
       width: 100%;
       background: rgba(0, 0, 0, 0.98);
-      padding: 20px 40px;
+      padding: 0;
       z-index: 1000;
+      border-bottom: 1px solid rgba(46, 79, 47, 0.3);
+      transition: padding 0.4s ease, background 0.4s ease;
+    }
+    
+    .header-container{
+      width: 100%;
+      padding: 20px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(46, 79, 47, 0.3);
-      transition: padding 0.4s ease, background 0.4s ease;
     }
 
     .logo {
@@ -60,10 +65,17 @@
       color: var(--warm-brown);
     }
 
+    nav{
+      width: 60%;
+    }
+
     nav ul {
       display: flex;
       list-style: none;
       gap: 30px;
+      justify-content: flex-end;
+      margin: 0;
+      padding: 0;
     }
 
     nav a {
@@ -201,9 +213,12 @@
     /* Responsive */
     @media (max-width: 768px) {
       header {
-        flex-direction: column;
-        padding: 15px;
-        align-items: flex-start;
+        padding: 15px 0px;
+        justify-content: space-between;
+      }
+
+      .header-container {
+        padding: 15px 20px;
       }
 
       .menu-toggle {
@@ -213,31 +228,34 @@
         color: var(--light);
         font-size: 2rem;
         cursor: pointer;
-        margin-left: auto;
         margin-top: 5px;
         z-index: 1100;
       }
 
       nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
         width: 100%;
+        background: rgba(0,0,0,0.98);
+        z-index: 1001;
       }
 
       nav ul {
         flex-direction: column;
+        text-align: center;
         gap: 15px;
-        margin-top: 10px;
         width: 100%;
         background: rgba(0,0,0,0.98);
-        position: absolute;
-        top: 70px;
-        left: 0;
+        position: fixed;
         padding: 20px 0;
-        display: none;
+        display: flex;
         border-bottom: 1px solid rgba(46, 79, 47, 0.3);
       }
 
-      nav ul.active {
-        display: flex;
+      nav.active {
+        display: block;
       }
     }
 
@@ -256,16 +274,18 @@
 <body>
   <!-- Header -->
   <header>
-    <div class="logo">Truffes de Bulgarie</div>
-    <button class="menu-toggle" aria-label="Ouvrir le menu">&#9776;</button>
-    <nav>
-      <ul>
-        <li><a href="#home">Accueil</a></li>
-        <li><a href="shop-fresh-truffles.html">Truffes</a></li>
-        <li><a href="about.html">À propos</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
+    <div class="header-container">
+      <div class="logo">Truffes de Bulgarie</div>
+      <button class="menu-toggle" aria-label="Ouvrir le menu">&#9776;</button>
+      <nav>
+        <ul>
+          <li><a href="#home">Accueil</a></li>
+          <li><a href="shop-fresh-truffles.html">Truffes</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
   <!-- Hero Section -->
@@ -299,12 +319,12 @@
   <script>
     // Responsive menu toggle
     document.querySelector('.menu-toggle').addEventListener('click', function() {
-      document.querySelector('nav ul').classList.toggle('active');
+      document.querySelector('nav').classList.toggle('active');
     });
     // Optional: close menu when a link is clicked (mobile UX)
     document.querySelectorAll('nav ul li a').forEach(link => {
       link.addEventListener('click', () => {
-        document.querySelector('nav ul').classList.remove('active');
+        document.querySelector('nav').classList.remove('active');
       });
     });
   </script>
